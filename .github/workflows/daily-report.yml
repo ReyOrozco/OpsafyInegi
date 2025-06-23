@@ -22,7 +22,7 @@ jobs:
         run: npm install
         working-directory: Mexico-Fuel-Prices
 
-     - name: Ejecutar script
+      - name: Ejecutar script
         run: node index.js
         working-directory: Mexico-Fuel-Prices
         env:
