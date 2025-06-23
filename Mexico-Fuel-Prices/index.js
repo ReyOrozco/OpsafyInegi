@@ -137,9 +137,9 @@ function generateEmailHTML(fuelPrices) {
     <div style="max-width: 800px; margin: 0 auto; background-color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
         
         <!-- Header -->
-        <div style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; padding: 30px; text-align: center;">
-            <h1 style="margin: 0; font-size: 28px; font-weight: 300;">📊 Reporte de Precios</h1>
-            <h2 style="margin: 10px 0 0 0; font-size: 24px; font-weight: 600;">Combustibles México</h2>
+        <div style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: black; padding: 30px; text-align: center;">
+            <h1 style="margin: 0; font-size: 20px; font-weight: 300;">📊 Reporte de Precios</h1>
+            <h2 style="margin: 10px 0 0 0; font-size: 18px; font-weight: 600;">Combustibles México</h2>
             <p style="margin: 15px 0 0 0; opacity: 0.9; font-size: 16px;">
                 Un reporte automático de 
                 <a href="https://opsafy.com/" style="color: #fff; font-weight: bold; text-decoration: underline;" target="_blank">Opsafy</a> 
@@ -155,19 +155,25 @@ function generateEmailHTML(fuelPrices) {
                 </p>
             </div>
 
-            <h3 style="color: #333; margin-bottom: 20px; font-size: 20px; text-align: center;">Precios Promedio por Tipo de Combustible</h3>
+           <h3 style="color: #333; margin-bottom: 20px; font-size: 20px; text-align: center;">Precios Promedio por Tipo de Combustible</h3>
 
             <div style="overflow-x: auto; margin-bottom: 20px;">
                 <table style="width: 100%; border-collapse: collapse; background-color: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                    <thead>
-                        <tr style="background-color: #2a5298; color: white;">
-                            <th style="padding: 15px 12px; text-align: left; font-weight: 600; font-size: 14px;">Tipo de Combustible</th>
-                            <th style="padding: 15px 12px; text-align: right; font-weight: 600; font-size: 14px;">Precio Promedio</th>
-                            <th style="padding: 15px 12px; text-align: right; font-weight: 600; font-size: 14px;">Precio Mínimo</th>
-                            <th style="padding: 15px 12px; text-align: right; font-weight: 600; font-size: 14px;">Precio Máximo</th>
-                            <th style="padding: 15px 12px; text-align: center; font-weight: 600; font-size: 14px;">Estaciones</th>
+                                    <thead>
+                    <tr style="background-color: #2a5298; color: white;">
+                        <th style="padding: 15px 12px; text-align: left; font-weight: 600; font-size: 14px;">Tipo de Combustible</th>
+                        <th style="padding: 15px 12px; text-align: right; font-weight: 600; font-size: 14px;">Precio Promedio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${fuelPrices.map(fuel => `
+                        <tr>
+                            <td style="padding: 12px; border-bottom: 1px solid #e0e0e0; font-weight: 500;">${fuel.type}</td>
+                            <td style="padding: 12px; border-bottom: 1px solid #e0e0e0; text-align: right; font-weight: 600; color: #2c5530;">$${fuel.averagePrice}</td>
                         </tr>
-                    </thead>
+                    `).join('')}
+                </tbody>
+
                     <tbody>
                         ${tableRows}
                     </tbody>
