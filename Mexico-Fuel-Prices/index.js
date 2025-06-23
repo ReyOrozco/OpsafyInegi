@@ -126,7 +126,7 @@ function generateEmailHTML(fuelPrices) {
         }
 
         const htmlContent = `
-        <!DOCTYPE html>
+     <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -135,24 +135,28 @@ function generateEmailHTML(fuelPrices) {
 </head>
 <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;">
     <div style="max-width: 800px; margin: 0 auto; background-color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        
         <!-- Header -->
         <div style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; padding: 30px; text-align: center;">
             <h1 style="margin: 0; font-size: 28px; font-weight: 300;">📊 Reporte de Precios</h1>
             <h2 style="margin: 10px 0 0 0; font-size: 24px; font-weight: 600;">Combustibles México</h2>
-            <p style="margin: 15px 0 0 0; opacity: 0.9; font-size: 16px;">Un reporte automático de <strong>Opsafy</strong> con datos oficiales de INEGI</p>
+            <p style="margin: 15px 0 0 0; opacity: 0.9; font-size: 16px;">
+                Un reporte automático de 
+                <a href="https://opsafy.com/" style="color: #fff; font-weight: bold; text-decoration: underline;" target="_blank">Opsafy</a> 
+                con datos oficiales de INEGI
+            </p>
         </div>
-        
+
         <!-- Content -->
         <div style="padding: 30px;">
             <div style="margin-bottom: 25px; padding: 15px; background-color: #f8f9fa; border-left: 4px solid #2a5298; border-radius: 4px;">
                 <p style="margin: 0; color: #666; font-size: 14px;">
-                    <strong>Fecha del reporte:</strong> ${currentDate}<br>
-                    <strong>Fuente:</strong> Instituto Nacional de Estadística y Geografía (INEGI)
+                    <strong>Fecha del reporte:</strong> ${currentDate}
                 </p>
             </div>
-            
-            <h3 style="color: #333; margin-bottom: 20px; font-size: 20px;">Precios Promedio por Tipo de Combustible</h3>
-            
+
+            <h3 style="color: #333; margin-bottom: 20px; font-size: 20px; text-align: center;">Precios Promedio por Tipo de Combustible</h3>
+
             <div style="overflow-x: auto; margin-bottom: 20px;">
                 <table style="width: 100%; border-collapse: collapse; background-color: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                     <thead>
@@ -166,19 +170,21 @@ function generateEmailHTML(fuelPrices) {
                     </tbody>
                 </table>
             </div>
-            
+
             <div style="margin-top: 30px; padding: 20px; background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px;">
                 <p style="margin: 0; color: #856404; font-size: 14px; line-height: 1.5;">
                     <strong>📝 Nota:</strong> Los precios están expresados en pesos mexicanos por litro. 
-                    Este reporte se genera automáticamente por <strong>Opsafy</strong> con los datos más recientes disponibles en la API de INEGI.
+                    Este reporte se genera automáticamente por 
+                    <a href="https://opsafy.com/" style="font-weight: bold; color: #856404;" target="_blank">Opsafy</a> 
+                    con los datos más recientes disponibles en la API de INEGI.
                 </p>
             </div>
         </div>
-        
+
         <!-- Footer -->
         <div style="background-color: #f8f9fa; padding: 20px; text-align: center; border-top: 1px solid #e0e0e0;">
             <p style="margin: 0; color: #666; font-size: 12px;">
-                Reporte generado automáticamente • Sistema de Monitoreo de Precios • Opsafy
+                Reporte generado automáticamente • Sistema de Monitoreo de Precios • <a href="https://opsafy.com/" target="_blank" style="color: #444;">Opsafy</a>
             </p>
         </div>
     </div>
