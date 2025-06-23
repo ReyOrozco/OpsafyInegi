@@ -122,92 +122,15 @@ function generateEmailHTML(fuelPrices) {
             </tr>
           `;
 
-    // HTML final
-    return `
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reporte de Precios de Combustibles</title>
-</head>
-<body style="margin:0;padding:0;font-family:Arial,sans-serif;background:#f5f5f5;">
-  <div style="max-width:800px;margin:0 auto;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.1);">
-    
-    <!-- HEADER -->
-    <div style="background:linear-gradient(135deg,#1e3c72 0%,#2a5298 100%);color:#fff;padding:30px;text-align:center;">
-      <h1 style="margin:0;font-size:26px;font-weight:300;">📊 Reporte de Precios</h1>
-      <h2 style="margin:10px 0 0;font-size:22px;font-weight:600;">Combustibles México</h2>
-      <p style="margin:15px 0 0;font-size:15px;opacity:.9;">
-        Reporte automático de
-        <a href="https://opsafy.com/" target="_blank" style="color:#fff;font-weight:bold;text-decoration:underline;">
-          Opsafy
-        </a>
-        con datos oficiales de INEGI
-      </p>
-    </div>
+    // Leer plantilla HTML y reemplazar marcadores
+    const templatePath = path.join(__dirname, 'templates', 'email.html');
+    let htmlContent = fs.readFileSync(templatePath, 'utf8');
 
-    <!-- FECHA -->
-    <div style="padding:25px 30px;background:#f8f9fa;border-left:4px solid #2a5298;">
-      <p style="margin:0;color:#666;font-size:14px;">
-        <strong>Fecha del reporte:</strong> ${currentDate}
-      </p>
-    </div>
+    htmlContent = htmlContent.replace('${currentDate}', currentDate);
+    htmlContent = htmlContent.replace('${tableRows}', tableRows);
 
-    <!-- TABLA -->
-    <h3 style="color:#333;margin:20px 0;font-size:20px;text-align:center;">
-      Precios Promedio por Tipo de Combustible
-    </h3>
-
-    <div style="padding:0 30px 30px;">
-      <table style="width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.1);">
-        <thead>
-          <tr style="background:#2a5298;color:#fff;">
-            <th style="padding:15px 12px;text-align:left;font-size:14px;font-weight:600;">
-              Tipo de Combustible
-            </th>
-            <th style="padding:15px 12px;text-align:right;font-size:14px;font-weight:600;">
-              Precio Promedio
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          ${tableRows}
-        </tbody>
-      </table>
-    </div>
-
-    <!-- NOTA -->
-    <div style="margin:0 30px 30px;padding:20px;background:#fff3cd;border:1px solid #ffeaa7;border-radius:8px;">
-      <p style="margin:0;color:#856404;font-size:14px;line-height:1.4;">
-        <strong>📝 Nota:</strong> Los precios están expresados en pesos mexicanos por litro.
-        Este reporte se genera automáticamente por
-        <a href="https://opsafy.com/" target="_blank" style="font-weight:bold;color:#856404;">Opsafy</a>
-        con los datos más recientes disponibles en la API de INEGI.
-      </p>
-    </div>
-
-    <!-- FOOTER -->
-    <div style="background:#f8f9fa;padding:20px;text-align:center;border-top:1px solid #e0e0e0;">
-      <p style="margin:0;color:#666;font-size:12px;">
-        Reporte generado automáticamente • Sistema de Monitoreo de Precios •
-        <a href="https://opsafy.com/" target="_blank" style="color:#444;">Opsafy</a>
-      </p>
-    </div>
-
-  </div>
-</body>
-</html>`;
-}
-
-        `;
-
-        console.log('✅ HTML email content generated successfully');
-        return htmlContent;
-    } catch (error) {
-        console.error('❌ Error generating HTML email:', error.message);
-        throw error;
-    }
+    console.log('✅ HTML email content generated successfully');
+    return htmlContent;
 }
 
 /**
