@@ -163,6 +163,9 @@ function generateEmailHTML(fuelPrices) {
                         <tr style="background-color: #2a5298; color: white;">
                             <th style="padding: 15px 12px; text-align: left; font-weight: 600; font-size: 14px;">Tipo de Combustible</th>
                             <th style="padding: 15px 12px; text-align: right; font-weight: 600; font-size: 14px;">Precio Promedio</th>
+                            <th style="padding: 15px 12px; text-align: right; font-weight: 600; font-size: 14px;">Precio Mínimo</th>
+                            <th style="padding: 15px 12px; text-align: right; font-weight: 600; font-size: 14px;">Precio Máximo</th>
+                            <th style="padding: 15px 12px; text-align: center; font-weight: 600; font-size: 14px;">Estaciones</th>
                         </tr>
                     </thead>
                     <tbody>
