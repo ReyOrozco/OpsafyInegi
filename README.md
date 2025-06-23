@@ -7,6 +7,7 @@ A Node.js automation tool that fetches current fuel prices from INEGI's official
 - **Automated Data Fetching**: Retrieves real-time fuel prices from INEGI API
 - **Comprehensive Analysis**: Calculates average, minimum, and maximum prices per fuel type
 - **Professional Email Reports**: Generates clean HTML email templates with fuel price tables
+- **Editable Template**: Customize the look in `templates/email.html`
 - **Gmail Integration**: Sends reports via Gmail SMTP using secure App Passwords
 - **Error Handling**: Robust error handling for API failures and email delivery issues
 - **Environment Variables**: Secure credential management with environment variables
