@@ -2,27 +2,29 @@ name: Enviar reporte de combustibles diario
 
 on:
   schedule:
-    - cron: '0 14 * * *'  # 14:00 UTC = 8:00 AM CDMX
+    - cron: '0 14 * * *'  # 8:00 AM hora CDMX
   workflow_dispatch:
 
 jobs:
-  enviar-reporte:
+  run-script:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Clonar el repositorio
+      - name: Clonar repositorio
         uses: actions/checkout@v3
 
       - name: Instalar Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: 18
 
       - name: Instalar dependencias
         run: npm install
+        working-directory: Mexico-Fuel-Prices
 
       - name: Ejecutar script
-        env:
-          GMAIL_USER: ${{ secrets.GMAIL_USER }}
-          GMAIL_PASS: ${{ secrets.GMAIL_PASS }}
         run: node index.js
+        working-directory: Mexico-Fuel-Prices
+
+      - name: Done ✅
+        run: echo "¡Reporte enviado con éxito!"
