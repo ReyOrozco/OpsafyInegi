@@ -87,118 +87,118 @@ function extractFuelPrices(apiData) {
 }
 
 /**
- * Generates HTML email content with fuel prices
- * @param {Array} fuelPrices - Formatted fuel price data
- * @returns {String} HTML email content
+ * Genera el HTML del correo con solo la columna “Precio Promedio”
+ * @param {Array} fuelPrices - datos procesados
+ * @returns {String} HTML completo
  */
 function generateEmailHTML(fuelPrices) {
-    try {
-        console.log('🔄 Generating HTML email content...');
-        
-        const currentDate = new Date().toLocaleDateString('es-MX', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
+    console.log('🔄 Generating HTML email content…');
 
-        let tableRows = '';
-        
-        if (fuelPrices.length === 0) {
-            tableRows = `
-                <tr>
-                    <td colspan="5" style="text-align: center; padding: 20px; color: #666; font-style: italic;">
-                        No hay datos de precios disponibles en este momento
-                    </td>
-                </tr>
-            `;
-        } else {
-            tableRows = fuelPrices.map(fuel => `
-                <tr>
-                    <td style="padding: 12px; border-bottom: 1px solid #e0e0e0; font-weight: 500;">${fuel.type}</td>
-                    <td style="padding: 12px; border-bottom: 1px solid #e0e0e0; text-align: right; font-weight: 600; color: #2c5530;">$${fuel.averagePrice}</td>
-                    <td style="padding: 12px; border-bottom: 1px solid #e0e0e0; text-align: right; color: #666;">$${fuel.minPrice}</td>
-                    <td style="padding: 12px; border-bottom: 1px solid #e0e0e0; text-align: right; color: #666;">$${fuel.maxPrice}</td>
-                    <td style="padding: 12px; border-bottom: 1px solid #e0e0e0; text-align: center; color: #666;">${fuel.stationCount}</td>
-                </tr>
-            `).join('');
-        }
+    const currentDate = new Date().toLocaleDateString('es-MX', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
 
-        const htmlContent = `
-     <!DOCTYPE html>
+    // Crea las filas de la tabla (solo tipo + precio promedio)
+    const tableRows = fuelPrices.length
+        ? fuelPrices.map(fuel => `
+            <tr>
+                <td style="padding:12px;border-bottom:1px solid #e0e0e0;font-weight:500;">
+                    ${fuel.type}
+                </td>
+                <td style="padding:12px;border-bottom:1px solid #e0e0e0;text-align:right;font-weight:600;color:#2c5530;">
+                    $${fuel.averagePrice}
+                </td>
+            </tr>
+          `).join('')
+        : `
+            <tr>
+                <td colspan="2" style="text-align:center;padding:20px;color:#666;font-style:italic;">
+                    No hay datos de precios disponibles en este momento.
+                </td>
+            </tr>
+          `;
+
+    // HTML final
+    return `
+<!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reporte de Precios de Combustibles</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reporte de Precios de Combustibles</title>
 </head>
-<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;">
-    <div style="max-width: 800px; margin: 0 auto; background-color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-        
-        <!-- Header -->
-        <div style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: black; padding: 30px; text-align: center;">
-            <h1 style="margin: 0; font-size: 20px; font-weight: 300;">📊 Reporte de Precios</h1>
-            <h2 style="margin: 10px 0 0 0; font-size: 18px; font-weight: 600;">Combustibles México</h2>
-            <p style="margin: 15px 0 0 0; opacity: 0.9; font-size: 16px;">
-                Un reporte automático de 
-                <a href="https://opsafy.com/" style="color: #fff; font-weight: bold; text-decoration: underline;" target="_blank">Opsafy</a> 
-                con datos oficiales de INEGI
-            </p>
-        </div>
-
-        <!-- Content -->
-        <div style="padding: 30px;">
-            <div style="margin-bottom: 25px; padding: 15px; background-color: #f8f9fa; border-left: 4px solid #2a5298; border-radius: 4px;">
-                <p style="margin: 0; color: #666; font-size: 14px;">
-                    <strong>Fecha del reporte:</strong> ${currentDate}
-                </p>
-            </div>
-
-           <h3 style="color: #333; margin-bottom: 20px; font-size: 20px; text-align: center;">Precios Promedio por Tipo de Combustible</h3>
-
-            <div style="overflow-x: auto; margin-bottom: 20px;">
-                <table style="width: 100%; border-collapse: collapse; background-color: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                                    <thead>
-                    <tr style="background-color: #2a5298; color: white;">
-                        <th style="padding: 15px 12px; text-align: left; font-weight: 600; font-size: 14px;">Tipo de Combustible</th>
-                        <th style="padding: 15px 12px; text-align: right; font-weight: 600; font-size: 14px;">Precio Promedio</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${fuelPrices.map(fuel => `
-                        <tr>
-                            <td style="padding: 12px; border-bottom: 1px solid #e0e0e0; font-weight: 500;">${fuel.type}</td>
-                            <td style="padding: 12px; border-bottom: 1px solid #e0e0e0; text-align: right; font-weight: 600; color: #2c5530;">$${fuel.averagePrice}</td>
-                        </tr>
-                    `).join('')}
-                </tbody>
-
-                    <tbody>
-                        ${tableRows}
-                    </tbody>
-                </table>
-            </div>
-
-            <div style="margin-top: 30px; padding: 20px; background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px;">
-                <p style="margin: 0; color: #856404; font-size: 14px; line-height: 1.5;">
-                    <strong>📝 Nota:</strong> Los precios están expresados en pesos mexicanos por litro. 
-                    Este reporte se genera automáticamente por 
-                    <a href="https://opsafy.com/" style="font-weight: bold; color: #856404;" target="_blank">Opsafy</a> 
-                    con los datos más recientes disponibles en la API de INEGI.
-                </p>
-            </div>
-        </div>
-
-        <!-- Footer -->
-        <div style="background-color: #f8f9fa; padding: 20px; text-align: center; border-top: 1px solid #e0e0e0;">
-            <p style="margin: 0; color: #666; font-size: 12px;">
-                Reporte generado automáticamente • Sistema de Monitoreo de Precios • <a href="https://opsafy.com/" target="_blank" style="color: #444;">Opsafy</a>
-            </p>
-        </div>
+<body style="margin:0;padding:0;font-family:Arial,sans-serif;background:#f5f5f5;">
+  <div style="max-width:800px;margin:0 auto;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.1);">
+    
+    <!-- HEADER -->
+    <div style="background:linear-gradient(135deg,#1e3c72 0%,#2a5298 100%);color:#fff;padding:30px;text-align:center;">
+      <h1 style="margin:0;font-size:26px;font-weight:300;">📊 Reporte de Precios</h1>
+      <h2 style="margin:10px 0 0;font-size:22px;font-weight:600;">Combustibles México</h2>
+      <p style="margin:15px 0 0;font-size:15px;opacity:.9;">
+        Reporte automático de
+        <a href="https://opsafy.com/" target="_blank" style="color:#fff;font-weight:bold;text-decoration:underline;">
+          Opsafy
+        </a>
+        con datos oficiales de INEGI
+      </p>
     </div>
+
+    <!-- FECHA -->
+    <div style="padding:25px 30px;background:#f8f9fa;border-left:4px solid #2a5298;">
+      <p style="margin:0;color:#666;font-size:14px;">
+        <strong>Fecha del reporte:</strong> ${currentDate}
+      </p>
+    </div>
+
+    <!-- TABLA -->
+    <h3 style="color:#333;margin:20px 0;font-size:20px;text-align:center;">
+      Precios Promedio por Tipo de Combustible
+    </h3>
+
+    <div style="padding:0 30px 30px;">
+      <table style="width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.1);">
+        <thead>
+          <tr style="background:#2a5298;color:#fff;">
+            <th style="padding:15px 12px;text-align:left;font-size:14px;font-weight:600;">
+              Tipo de Combustible
+            </th>
+            <th style="padding:15px 12px;text-align:right;font-size:14px;font-weight:600;">
+              Precio Promedio
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          ${tableRows}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- NOTA -->
+    <div style="margin:0 30px 30px;padding:20px;background:#fff3cd;border:1px solid #ffeaa7;border-radius:8px;">
+      <p style="margin:0;color:#856404;font-size:14px;line-height:1.4;">
+        <strong>📝 Nota:</strong> Los precios están expresados en pesos mexicanos por litro.
+        Este reporte se genera automáticamente por
+        <a href="https://opsafy.com/" target="_blank" style="font-weight:bold;color:#856404;">Opsafy</a>
+        con los datos más recientes disponibles en la API de INEGI.
+      </p>
+    </div>
+
+    <!-- FOOTER -->
+    <div style="background:#f8f9fa;padding:20px;text-align:center;border-top:1px solid #e0e0e0;">
+      <p style="margin:0;color:#666;font-size:12px;">
+        Reporte generado automáticamente • Sistema de Monitoreo de Precios •
+        <a href="https://opsafy.com/" target="_blank" style="color:#444;">Opsafy</a>
+      </p>
+    </div>
+
+  </div>
 </body>
-</html>
+</html>`;
+}
 
         `;
 
