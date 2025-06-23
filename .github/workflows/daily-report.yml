@@ -25,6 +25,9 @@ jobs:
       - name: Ejecutar script
         run: node index.js
         working-directory: Mexico-Fuel-Prices
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_PASS: ${{ secrets.GMAIL_PASS }}
 
       - name: Done ✅
         run: echo "¡Reporte enviado con éxito!"
