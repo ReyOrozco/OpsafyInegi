@@ -9,9 +9,12 @@ const INEGI_API_URL = 'https://gaia.inegi.org.mx/sakbe_v3.1/combustible';
 const INEGI_API_KEY = '6Gwy3bY5-mG1W-2Jmk-ViXt-jCS7lbiAbeBI';
 const RECIPIENT_EMAIL = 'reynaldo.orozco@olpega.net';
 
-// Gmail SMTP configuration
-const GMAIL_USER = process.env.GMAIL_USER || 'your-email@gmail.com';
-const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD || 'your-app-password';
+// Generic SMTP configuration (defaults for Gmail)
+const SMTP_USER = process.env.SMTP_USER || process.env.GMAIL_USER || 'your-email@gmail.com';
+const SMTP_PASS = process.env.SMTP_PASS || process.env.GMAIL_APP_PASSWORD || 'your-app-password';
+const SMTP_HOST = process.env.SMTP_HOST || 'smtp.gmail.com';
+const SMTP_PORT = parseInt(process.env.SMTP_PORT, 10) || 465;
+const SMTP_SECURE = process.env.SMTP_SECURE ? process.env.SMTP_SECURE === 'true' : true;
 
 /**
  * Fetches fuel prices from INEGI API
@@ -134,35 +137,37 @@ function generateEmailHTML(fuelPrices) {
 }
 
 /**
- * Sends email using Gmail SMTP
+ * Sends email using configurable SMTP
  * @param {String} htmlContent - HTML email content
  * @param {Array} fuelPrices - Fuel price data for subject line
  */
 async function sendEmail(htmlContent, fuelPrices) {
     try {
         console.log('🔄 Configuring email transport...');
-        
-        // Validate Gmail credentials
-        if (!GMAIL_USER || GMAIL_USER === 'your-email@gmail.com') {
-            throw new Error('Gmail user not configured. Please set GMAIL_USER environment variable.');
+
+        // Validate credentials
+        if (!SMTP_USER || SMTP_USER === 'your-email@gmail.com') {
+            throw new Error('SMTP user not configured. Please set SMTP_USER (or GMAIL_USER) environment variable.');
         }
-        
-        if (!GMAIL_APP_PASSWORD || GMAIL_APP_PASSWORD === 'your-app-password') {
-            throw new Error('Gmail app password not configured. Please set GMAIL_APP_PASSWORD environment variable.');
+
+        if (!SMTP_PASS || SMTP_PASS === 'your-app-password') {
+            throw new Error('SMTP password not configured. Please set SMTP_PASS (or GMAIL_APP_PASSWORD) environment variable.');
         }
 
         // Create transporter
         const transporter = nodemailer.createTransport({
-            service: 'gmail',
+            host: SMTP_HOST,
+            port: SMTP_PORT,
+            secure: SMTP_SECURE,
             auth: {
-                user: GMAIL_USER,
-                pass: GMAIL_APP_PASSWORD
+                user: SMTP_USER,
+                pass: SMTP_PASS
             }
         });
 
         // Verify connection
         await transporter.verify();
-        console.log('✅ Gmail SMTP connection verified');
+        console.log(`✅ SMTP connection to ${SMTP_HOST} verified`);
 
         // Generate subject line
         const currentDate = new Date().toLocaleDateString('es-MX', {
@@ -178,7 +183,7 @@ async function sendEmail(htmlContent, fuelPrices) {
         const mailOptions = {
             from: {
                 name: 'Sistema de Monitoreo de Precios',
-                address: GMAIL_USER
+                address: SMTP_USER
             },
             to: RECIPIENT_EMAIL,
             subject: subject,
@@ -205,8 +210,8 @@ async function sendEmail(htmlContent, fuelPrices) {
         
         // Provide helpful error messages
         if (error.message.includes('Invalid login')) {
-            console.error('💡 Tip: Make sure you are using an App Password, not your regular Gmail password.');
-            console.error('💡 Enable 2FA and generate an App Password at: https://myaccount.google.com/apppasswords');
+            console.error('💡 Tip: Make sure you are using the correct SMTP credentials or an app password.');
+            console.error('💡 Many providers (including Gmail and Zoho) require an application-specific password when 2FA is enabled.');
         }
         
         throw error;
